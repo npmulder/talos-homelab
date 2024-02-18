@@ -22,7 +22,7 @@ nodes:
   - hostname: "home-kube-01"
     ipAddress: "10.1.2.51"
     installDisk: "/dev/sda"
-    talosImageURL: factory.talos.dev/installer/ce4c980550dd2ab1b17bbf2b08801c7eb59418eafe8f279833297925d67c7515
+    talosImageURL: factory.talos.dev/installer/376567988ad370138ad8b2698212367b8edcb69b5fd68c80be1f2ec7d603b4ba
     controlPlane: true
     networkInterfaces:
       - interface: eth0
@@ -38,7 +38,7 @@ nodes:
   - hostname: "home-kube-02"
     ipAddress: "10.1.2.52"
     installDisk: "/dev/sda"
-    talosImageURL: factory.talos.dev/installer/ce4c980550dd2ab1b17bbf2b08801c7eb59418eafe8f279833297925d67c7515
+    talosImageURL: factory.talos.dev/installer/376567988ad370138ad8b2698212367b8edcb69b5fd68c80be1f2ec7d603b4ba
     controlPlane: true
     networkInterfaces:
       - interface: eth0
@@ -54,7 +54,7 @@ nodes:
   - hostname: "home-kube-03"
     ipAddress: "10.1.2.53"
     installDisk: "/dev/sda"
-    talosImageURL: factory.talos.dev/installer/ce4c980550dd2ab1b17bbf2b08801c7eb59418eafe8f279833297925d67c7515
+    talosImageURL: factory.talos.dev/installer/376567988ad370138ad8b2698212367b8edcb69b5fd68c80be1f2ec7d603b4ba
     controlPlane: true
     networkInterfaces:
       - interface: eth0
@@ -70,7 +70,7 @@ nodes:
   - hostname: "home-kube-04"
     ipAddress: "10.1.2.54"
     installDisk: "/dev/sda"
-    talosImageURL: factory.talos.dev/installer/ce4c980550dd2ab1b17bbf2b08801c7eb59418eafe8f279833297925d67c7515
+    talosImageURL: factory.talos.dev/installer/376567988ad370138ad8b2698212367b8edcb69b5fd68c80be1f2ec7d603b4ba
     controlPlane: false
     networkInterfaces:
       - interface: eth0
@@ -84,7 +84,7 @@ nodes:
   - hostname: "home-kube-05"
     ipAddress: "10.1.2.55"
     installDisk: "/dev/sda"
-    talosImageURL: factory.talos.dev/installer/ce4c980550dd2ab1b17bbf2b08801c7eb59418eafe8f279833297925d67c7515
+    talosImageURL: factory.talos.dev/installer/376567988ad370138ad8b2698212367b8edcb69b5fd68c80be1f2ec7d603b4ba
     controlPlane: false
     networkInterfaces:
       - interface: eth0
