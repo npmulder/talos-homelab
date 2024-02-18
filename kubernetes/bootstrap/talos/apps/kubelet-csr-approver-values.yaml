@@ -1,0 +1,3 @@
+---
+providerRegex: ^(home-kube-01|home-kube-02|home-kube-03|home-kube-04|home-kube-05)$
+bypassDnsResolution: true
