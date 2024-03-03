@@ -1,0 +1,123 @@
+---
+# yaml-language-server: $schema=https://kubernetes-schemas.pages.dev/postgres-operator.crunchydata.com/postgrescluster_v1beta1.json
+apiVersion: postgres-operator.crunchydata.com/v1beta1
+kind: PostgresCluster
+metadata:
+  name: &name postgres
+spec:
+  postgresVersion: 16
+  patroni: # turn on sync writes to at least 1 other replica
+    dynamicConfiguration:
+      synchronous_mode: true
+      postgresql:
+        synchronous_commit: "on"
+  instances:
+    - name: postgres
+      metadata:
+        labels:
+          app.kubernetes.io/name: crunchy-postgres
+      replicas: &replica 6
+      dataVolumeClaimSpec:
+        storageClassName: openebs-hostpath
+        accessModes: ["ReadWriteOnce"]
+        resources:
+          requests:
+            storage: 20Gi
+      topologySpreadConstraints:
+        - maxSkew: 1
+          topologyKey: "kubernetes.io/hostname"
+          whenUnsatisfiable: "DoNotSchedule"
+          labelSelector:
+            matchLabels:
+              postgres-operator.crunchydata.com/data: postgres
+  users:
+    - name: "authentik"
+      databases: ["authentik"]
+      password:
+        type: AlphaNumeric
+    - name: "gatus"
+      databases: ["gatus"]
+      password:
+        type: AlphaNumeric
+    - name: "grafana"
+      databases: ["grafana"]
+      password:
+        type: AlphaNumeric
+    - name: "postgres"
+      databases: []
+      options: "SUPERUSER"
+      password:
+        type: AlphaNumeric
+  backups:
+    pgbackrest:
+      configuration: &backupConfig
+        - secret:
+            name: crunchy-pgo-secret
+      global: &backupFlag
+        archive-timeout: "60"
+        compress-type: bz2
+        compress-level: "9"
+        delta: "y"
+        repo1-bundle: "y"
+        repo1-block: "y"
+        repo1-path: /pgdata/crunchy-pgo/repo1
+        repo1-s3-uri-style: path
+        repo1-retention-full-type: time
+        repo1-retention-full: "14"
+        repo1-retention-diff: "30"
+        repo2-bundle: "y"
+        repo2-block: "y"
+        repo2-path: /pgdata/crunchy-pgo/repo2
+        repo2-s3-uri-style: path
+        repo2-retention-full-type: time
+        repo2-retention-full: "2"
+        repo2-retention-diff: "7"
+      manual:
+        repoName: repo1
+        options:
+          - --type=full
+      metadata:
+        labels:
+          app.kubernetes.io/name: crunchy-postgres-backup
+      repos:
+        - name: repo1
+          s3: &minio
+            bucket: postgresql
+            endpoint: 10.1.2.45:9002
+            region: ca-west-1
+          schedules:
+            full: "0 1 * * 0"           # Sunday at 1am
+            differential: "0 1 * * 1-6" # Mon-Sat at 1am
+            incremental: "0 3-23 * * *" # Every hour except 1-2am
+  dataSource:
+    pgbackrest:
+      stanza: db
+      configuration: *backupConfig
+      global: *backupFlag
+      repo:
+        name: repo1
+        s3: *minio
+  proxy:
+    pgBouncer:
+      service:
+        metadata:
+          annotations:
+            external-dns.alpha.kubernetes.io/hostname: cpgo.${SECRET_DOMAIN}
+            io.cilium/lb-ipam-ips: 10.1.2.61
+        type: LoadBalancer
+      port: 5432
+      replicas: *replica
+      config:
+        global:
+          # Grafana requires session
+          # Ref: https://github.com/grafana/grafana/issues/74260
+          pool_mode: transaction
+          client_tls_sslmode: prefer
+      topologySpreadConstraints:
+        - maxSkew: 1
+          topologyKey: kubernetes.io/hostname
+          whenUnsatisfiable: DoNotSchedule
+          labelSelector:
+            matchLabels:
+              postgres-operator.crunchydata.com/cluster: *name
+              postgres-operator.crunchydata.com/role: pgbouncer
