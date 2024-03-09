@@ -89,14 +89,6 @@ spec:
             full: "0 1 * * 0"           # Sunday at 1am
             differential: "0 1 * * 1-6" # Mon-Sat at 1am
             incremental: "0 3-23 * * *" # Every hour except 1-2am
-  dataSource:
-    pgbackrest:
-      stanza: db
-      configuration: *backupConfig
-      global: *backupFlag
-      repo:
-        name: repo1
-        s3: *minio
   proxy:
     pgBouncer:
       service:
