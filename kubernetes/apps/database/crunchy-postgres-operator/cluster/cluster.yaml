@@ -45,7 +45,7 @@ spec:
         type: AlphaNumeric
     - name: "postgres"
       databases: []
-      options: "SUPERUSER"
+      options: "CREATEDB CREATEROLE"
       password:
         type: AlphaNumeric
   backups:
