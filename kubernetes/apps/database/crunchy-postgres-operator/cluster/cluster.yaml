@@ -44,13 +44,13 @@ spec:
       password:
         type: AlphaNumeric
     - name: "talos"
-      databases: []
-      options: "SUPERUSER"
+      databases: ["postgres"]
+      options: "CREATEDB CREATEROLE"
       password:
         type: AlphaNumeric
     - name: "postgres"
-      databases: []
-      options: "CREATEDB CREATEROLE"
+      databases: ["postgres"]
+      options: "SUPERUSER"
       password:
         type: AlphaNumeric
   backups:
