@@ -1,7 +1,7 @@
 ---
 storage:
   type: postgres
-  path: postgres-primary.database.svc?sslmode=require
+  path: ${POSTGRES_URI}?sslmode=require
   caching: true
 metrics: true
 debug: false
