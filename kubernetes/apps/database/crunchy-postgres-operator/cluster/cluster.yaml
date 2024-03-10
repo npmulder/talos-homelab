@@ -43,6 +43,11 @@ spec:
       databases: ["grafana"]
       password:
         type: AlphaNumeric
+    - name: "talos"
+      databases: []
+      options: "CREATEDB CREATEROLE"
+      password:
+        type: AlphaNumeric
     - name: "postgres"
       databases: []
       options: "CREATEDB CREATEROLE"
