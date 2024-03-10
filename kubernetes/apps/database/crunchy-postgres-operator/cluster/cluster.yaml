@@ -16,7 +16,7 @@ spec:
       metadata:
         labels:
           app.kubernetes.io/name: crunchy-postgres
-      replicas: &replica 6
+      replicas: &replica 5
       dataVolumeClaimSpec:
         storageClassName: openebs-hostpath
         accessModes: ["ReadWriteOnce"]
