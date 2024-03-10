@@ -45,7 +45,7 @@ spec:
         type: AlphaNumeric
     - name: "talos"
       databases: []
-      options: "CREATEDB CREATEROLE"
+      options: "SUPERUSER"
       password:
         type: AlphaNumeric
     - name: "postgres"
