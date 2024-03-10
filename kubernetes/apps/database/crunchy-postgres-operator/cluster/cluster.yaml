@@ -44,7 +44,7 @@ spec:
       password:
         type: AlphaNumeric
     - name: "talos"
-      databases: ["postgres"]
+      databases: ["postgres", "authentik", "gatus", "grafana"]
       options: "CREATEDB CREATEROLE"
       password:
         type: AlphaNumeric
@@ -54,10 +54,6 @@ spec:
       password:
         type: AlphaNumeric
     - name: "postgres"
-      databases: ["postgres"]
-      options: "SUPERUSER"
-      password:
-        type: AlphaNumeric
   backups:
     pgbackrest:
       configuration: &backupConfig
