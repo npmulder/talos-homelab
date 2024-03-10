@@ -48,6 +48,11 @@ spec:
       options: "CREATEDB CREATEROLE"
       password:
         type: AlphaNumeric
+    - name: "talos1"
+      databases: ["postgres"]
+      options: "CREATEDB CREATEROLE"
+      password:
+        type: AlphaNumeric
     - name: "postgres"
       databases: ["postgres"]
       options: "SUPERUSER"
