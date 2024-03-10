@@ -1,0 +1,22 @@
+---
+storage:
+  type: postgres
+  path: postgres-primary.database.svc?sslmode=require
+  caching: true
+metrics: true
+debug: false
+ui:
+  title: Health Status
+  header: Health Status
+alerting:
+  discord:
+    webhook-url: ${DISCORD_WEBHOOK_URL}
+    default-alert:
+      description: health-check failed
+      send-on-resolved: true
+      failure-threshold: 5
+      success-threshold: 2
+connectivity:
+  checker:
+    target: 1.1.1.1:53
+    interval: 1m
