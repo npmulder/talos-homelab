@@ -16,7 +16,7 @@ spec:
       metadata:
         labels:
           app.kubernetes.io/name: crunchy-postgres
-      replicas: &replica 5
+      replicas: &replica 6
       dataVolumeClaimSpec:
         storageClassName: openebs-hostpath
         accessModes: ["ReadWriteOnce"]
@@ -89,7 +89,7 @@ spec:
         - name: repo1
           s3: &minio
             bucket: postgresql
-            endpoint: 10.1.2.45:9002
+            endpoint: 10.1.2.45:9000
             region: ca-west-1
           schedules:
             full: "0 1 * * 0"           # Sunday at 1am
