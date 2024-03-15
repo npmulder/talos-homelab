@@ -18,18 +18,21 @@ spec:
           app.kubernetes.io/name: crunchy-postgres
       replicas: &replica 6
       dataVolumeClaimSpec:
-        storageClassName: openebs-hostpath
-        accessModes: ["ReadWriteOnce"]
+        accessModes:
+        - "ReadWriteOnce"
         resources:
           requests:
-            storage: 20Gi
-      topologySpreadConstraints:
-        - maxSkew: 1
-          topologyKey: "kubernetes.io/hostname"
-          whenUnsatisfiable: "DoNotSchedule"
-          labelSelector:
-            matchLabels:
-              postgres-operator.crunchydata.com/data: postgres
+            storage: 1Gi
+      affinity:
+        podAntiAffinity:
+          preferredDuringSchedulingIgnoredDuringExecution:
+          - weight: 1
+            podAffinityTerm:
+              topologyKey: kubernetes.io/hostname
+              labelSelector:
+                matchLabels:
+                  postgres-operator.crunchydata.com/cluster: postgres
+                  postgres-operator.crunchydata.com/instance-set: postgres
   users:
     - name: "authentik"
       databases: ["authentik"]
@@ -56,53 +59,16 @@ spec:
     - name: "postgres"
   backups:
     pgbackrest:
-      configuration: &backupConfig
-        - secret:
-            name: crunchy-pgo-secret
-      global: &backupFlag
-        archive-timeout: "60"
-        compress-type: bz2
-        compress-level: "9"
-        delta: "y"
-        repo1-bundle: "y"
-        repo1-block: "y"
-        repo1-path: /pgdata/crunchy-pgo/repo1
-        repo1-s3-uri-style: path
-        repo1-retention-full-type: time
-        repo1-retention-full: "14"
-        repo1-retention-diff: "30"
-        repo2-bundle: "y"
-        repo2-block: "y"
-        repo2-path: /pgdata/crunchy-pgo/repo2
-        repo2-s3-uri-style: path
-        repo2-retention-full-type: time
-        repo2-retention-full: "2"
-        repo2-retention-diff: "7"
-      manual:
-        repoName: repo1
-        options:
-          - --type=full
-      metadata:
-        labels:
-          app.kubernetes.io/name: crunchy-postgres-backup
+      image: registry.developers.crunchydata.com/crunchydata/crunchy-pgbackrest:ubi8-2.49-0
       repos:
-        - name: repo1
-          s3: &minio
-            bucket: postgresql
-            endpoint: 10.1.2.45:9000
-            region: ca-west-1
-          schedules:
-            full: "0 1 * * 0"           # Sunday at 1am
-            differential: "0 1 * * 1-6" # Mon-Sat at 1am
-            incremental: "0 3-23 * * *" # Every hour except 1-2am
-  dataSource:
-    pgbackrest:
-      stanza: db
-      configuration: *backupConfig
-      global: *backupFlag
-      repo:
-        name: repo1
-        s3: *minio
+      - name: repo1
+        volume:
+          volumeClaimSpec:
+            accessModes:
+            - "ReadWriteOnce"
+            resources:
+              requests:
+                storage: 1Gi
   proxy:
     pgBouncer:
       service:
@@ -112,18 +78,14 @@ spec:
             io.cilium/lb-ipam-ips: 10.1.2.61
         type: LoadBalancer
       port: 5432
-      replicas: *replica
-      config:
-        global:
-          # Grafana requires session
-          # Ref: https://github.com/grafana/grafana/issues/74260
-          pool_mode: transaction
-          client_tls_sslmode: prefer
-      topologySpreadConstraints:
-        - maxSkew: 1
-          topologyKey: kubernetes.io/hostname
-          whenUnsatisfiable: DoNotSchedule
-          labelSelector:
-            matchLabels:
-              postgres-operator.crunchydata.com/cluster: *name
-              postgres-operator.crunchydata.com/role: pgbouncer
+      replicas: 2
+      affinity:
+        podAntiAffinity:
+          preferredDuringSchedulingIgnoredDuringExecution:
+          - weight: 1
+            podAffinityTerm:
+              topologyKey: kubernetes.io/hostname
+              labelSelector:
+                matchLabels:
+                  postgres-operator.crunchydata.com/cluster: postgres
+                  postgres-operator.crunchydata.com/role: pgbouncer
