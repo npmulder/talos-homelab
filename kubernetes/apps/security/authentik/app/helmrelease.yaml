@@ -26,7 +26,7 @@ spec:
             name: authentik-secret
     authentik:
       redis:
-        host: redis-headless.database.svc.cluster.local:26379
+        host: redis-headless.database.svc.cluster.local
     server:
       autoscaling:
         enabled: true
