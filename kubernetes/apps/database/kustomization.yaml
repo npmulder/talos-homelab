@@ -7,4 +7,4 @@ resources:
   - ./namespace.yaml
   # Flux-Kustomizations
   - ./crunchy-postgres-operator/ks.yaml
-  - ./dragonfly-operator/ks.yaml
+  - ./redis/ks.yaml
