@@ -18,3 +18,4 @@ resources:
   - ./dragonfly.yaml
   - ./crunchydata.yaml
   - ./bitnami.yaml
+  - ./prometheus-community.yaml
