@@ -28,7 +28,7 @@ spec:
     keepHistory: false
   dependsOn:
     - name: openebs
-      namespace: storage
+      namespace: openebs-system
   values:
     crds:
     alertmanager:
@@ -52,7 +52,7 @@ spec:
         storage:
           volumeClaimTemplate:
             spec:
-              storageClassName: ceph-block
+              storageClassName: openebs-hostpath
               resources:
                 requests:
                   storage: 1Gi
@@ -189,7 +189,7 @@ spec:
         storageSpec:
           volumeClaimTemplate:
             spec:
-              storageClassName: local-hostpath
+              storageClassName: openebs-hostpath
               resources:
                 requests:
                   storage: 20Gi
