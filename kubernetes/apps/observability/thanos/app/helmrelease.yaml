@@ -117,7 +117,7 @@ spec:
                   severity: critical
       persistence:
         enabled: true
-        storageClass: local-hostpath
+        storageClass: openebs-hostpath
         size: 10Gi
     metrics:
       enabled: true
