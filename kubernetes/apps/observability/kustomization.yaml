@@ -12,6 +12,6 @@ resources:
   # - ./karma/ks.yaml
   # - ./kromgo/ks.yaml
   - ./kube-prometheus-stack/ks.yaml
-  # - ./thanos/ks.yaml
+  - ./thanos/ks.yaml
   # # Exporters
   # - ./exporters
