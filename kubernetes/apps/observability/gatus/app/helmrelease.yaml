@@ -55,7 +55,7 @@ spec:
             image:
               # TODO: move to semver once available
               repository: ghcr.io/twin/gatus
-              tag: latest@sha256:fecb4c38722df59f5e00ab4fcf2393d9b8dad9161db208d8d79386dc86da8a55
+              tag: latest@sha256:f51dc283b6f6c9961fe87d824e3b64a902693f1ec04b257caa888f36190576b0
             env:
               TZ: ${TIMEZONE}
               GATUS_CONFIG_PATH: /config
