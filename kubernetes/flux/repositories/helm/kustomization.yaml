@@ -19,3 +19,4 @@ resources:
   - ./crunchydata.yaml
   - ./bitnami.yaml
   - ./prometheus-community.yaml
+  - ./piraeus.yaml
