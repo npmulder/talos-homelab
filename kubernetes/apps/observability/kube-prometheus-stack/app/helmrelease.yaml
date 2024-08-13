@@ -202,7 +202,7 @@ spec:
               - targets:
                   - 10.1.2.45:9100
         thanos:
-          image: quay.io/thanos/thanos:v0.35.0
+          image: quay.io/thanos/thanos:v0.36.1
           objectStorageConfig:
             existingSecret:
               name: thanos-objstore-secret
